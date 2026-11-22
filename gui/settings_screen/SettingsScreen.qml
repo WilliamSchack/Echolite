@@ -489,6 +489,9 @@ RowLayout {
                                     Layout.fillHeight: true
                                     implicitWidth: parent.height
 
+                                    iconSource: "qrc:/icons/ui/Folder.svg"
+                                    iconColour: "black"
+
                                     onClicked: _manager.settings.DefaultSaveLocationButtonClicked()
                                 }
                             }
