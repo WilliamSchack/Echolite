@@ -491,6 +491,7 @@ RowLayout {
 
                                     iconSource: "qrc:/icons/ui/Folder.svg"
                                     iconColour: "black"
+                                    iconMargins: 8
 
                                     onClicked: _manager.settings.DefaultSaveLocationButtonClicked()
                                 }
@@ -809,6 +810,7 @@ RowLayout {
 
                                     iconSource: "qrc:/icons/ui/Clipboard.svg"
                                     iconColour: "black"
+                                    iconMargins: 8
 
                                     onClicked: _manager.settings.YouTubeCookiesPasteButtonClicked()
                                 }
@@ -846,6 +848,7 @@ RowLayout {
 
                                     iconSource: "qrc:/icons/ui/Clipboard.svg"
                                     iconColour: "black"
+                                    iconMargins: 8
 
                                     onClicked: _manager.settings.YouTubePOTokenPasteButtonClicked()
                                 }
