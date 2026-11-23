@@ -3,46 +3,24 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import QtQuick.Effects
 
-Popup {
+OverlayPopup {
     id: root
-
-    property int fadeDurationMs: 100
-
-    anchors.centerIn: parent
-
-    modal: false
-    dim: false
-    focus: true
-    closePolicy: Popup.NoAutoClose
-
-    padding: 20
-    width: 560 + padding * 2
 
     Component {
         id: messageDialogComponent
         CustomMessageDialog {}
     }
 
-    background: StyledBackground {
-        radius: 20
+    Column {
+        id: content
 
-        // Outer Shadow
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            shadowEnabled: true
-            shadowColor: "black"
-            shadowOpacity: 0.25
-            shadowBlur: 0.4
-            shadowHorizontalOffset: 4
-            shadowVerticalOffset: 4
-        }
-    }
+        width: parent.width
+        anchors.margins: root.padding
 
-    contentItem: ColumnLayout {
         spacing: 10
 
         Text {
-            Layout.fillWidth: true
+            width: parent.width
             horizontalAlignment: Qt.AlignHCenter
 
             text: "Add Tracks"
@@ -51,14 +29,14 @@ Popup {
             font.pixelSize: 30
         }
 
-        ColumnLayout {
-            Layout.fillWidth: true
+        Column {
+            width: parent.width
             spacing: 5
 
             // Download Link
             RowLayout {
-                Layout.fillWidth: true
-                Layout.maximumHeight: 40
+                width: parent.width
+                height: 40
                 spacing: 5
 
                 CustomTextField {
@@ -88,8 +66,8 @@ Popup {
 
             // Folder Path
             RowLayout {
-                Layout.fillWidth: true
-                Layout.maximumHeight: 40
+                width: parent.width
+                height: 40
                 spacing: 5
 
                 CustomTextField {
@@ -117,14 +95,14 @@ Popup {
             }
         }
 
-        ColumnLayout {
-            Layout.fillWidth: true
+        Column {
+            width: parent.width
 
             spacing: 5
 
             CustomButton {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 40
+                width: parent.width
+                height: 40
                 enabled: !_manager.music.addTracksPopup.checkingInputs
                 text: _manager.music.addTracksPopup.checkingInputs ? "Getting Link Details..." : "Add Track(s) & Start Download"
                 font.bold: true
@@ -149,8 +127,8 @@ Popup {
             CustomButton {
                 visible: _manager.music.tracks.length != 0
 
-                Layout.fillWidth: true
-                Layout.preferredHeight: 30
+                width: parent.width
+                height: 30
                 enabled: !_manager.music.addTracksPopup.checkingInputs
                 text: "Close"
                 font.bold: true
@@ -159,24 +137,6 @@ Popup {
 
                 onClicked: _manager.music.addTracksPopup.visible = false
             }
-        }
-    }
-
-    enter: Transition {
-        NumberAnimation {
-            property: "opacity"
-            from: 0.0
-            to: 1.0
-            duration: root.fadeDurationMs
-        }
-    }
-
-    exit: Transition {
-        NumberAnimation {
-            property: "opacity"
-            from: 1.0
-            to: 0.0
-            duration: root.fadeDurationMs
         }
     }
 

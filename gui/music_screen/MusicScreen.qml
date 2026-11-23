@@ -321,29 +321,10 @@ Rectangle {
     }
 
     // Add Tracks Popup
-    Rectangle {
-        anchors.fill: parent
-        color: Qt.alpha("#000000", 0.4)
-        radius: parent.radius
-        opacity: addTracksPopup.visible ? 1.0 : 0.0
-        visible: opacity > 0
-
-        // Consume mouse input
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onPressed: (mouse) => { mouse.accepted = true }
-        }
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: addTracksPopup.fadeDurationMs
-            }
-        }
-    }
-
     AddTracksPopup {
         id: addTracksPopup
-        visible: _manager.music.addTracksPopup.visible && (parent ? parent.visible : false) && !missingDependenciesPopup.visible
+        shown: _manager.music.addTracksPopup.visible && (parent ? parent.visible : false) && !missingDependenciesPopup.visible
+        
+        radius: parent.radius
     }
 }
