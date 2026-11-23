@@ -14,6 +14,7 @@ TextField {
 
     font.pixelSize: 14
     color: enabled ? "black" : "grey"
+    selectionColor: "#35afe4"
 
     property bool hasRightLabel: false
     property bool valid: true
