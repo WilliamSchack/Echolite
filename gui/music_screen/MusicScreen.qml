@@ -294,30 +294,11 @@ Rectangle {
     }
 
     // Missing Dependencies Popup
-    Rectangle {
-        anchors.fill: parent
-        color: Qt.alpha("#000000", 0.4)
-        radius: parent.radius
-        opacity: missingDependenciesPopup.visible ? 1.0 : 0.0
-        visible: opacity > 0
-
-        // Consume mouse input
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onPressed: (mouse) => { mouse.accepted = true }
-        }
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: missingDependenciesPopup.fadeDurationMs
-            }
-        }
-    }
-
     MissingDependenciesPopup {
         id: missingDependenciesPopup
-        visible: !_manager.info.updates.allInstalled && (parent ? parent.visible : false)
+        shown: !_manager.info.updates.allInstalled && (parent ? parent.visible : false)
+
+        radius: parent.radius
     }
 
     // Add Tracks Popup

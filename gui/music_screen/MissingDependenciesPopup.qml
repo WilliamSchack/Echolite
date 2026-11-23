@@ -3,37 +3,12 @@ import QtQuick.Controls.Basic
 import QtQuick.Effects
 import Echolite.Info.Updates
 
-Popup {
+OverlayPopup {
     id: root
 
-    property int fadeDurationMs: 100
+    Column {
+        width: parent.width
 
-    anchors.centerIn: parent
-
-    modal: false
-    dim: false
-    focus: true
-    closePolicy: Popup.NoAutoClose
-
-    padding: 20
-    width: 560 + padding * 2
-
-    background: StyledBackground {
-        radius: 20
-
-        // Outer Shadow
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            shadowEnabled: true
-            shadowColor: "black"
-            shadowOpacity: 0.25
-            shadowBlur: 0.4
-            shadowHorizontalOffset: 4
-            shadowVerticalOffset: 4
-        }
-    }
-
-    contentItem: Column {
         spacing: 10
 
         Text {
@@ -93,24 +68,6 @@ Popup {
                 if (qjsVisual.visible)
                     qjsVisual.info.Download()
             }
-        }
-    }
-
-    enter: Transition {
-        NumberAnimation {
-            property: "opacity"
-            from: 0.0
-            to: 1.0
-            duration: root.fadeDurationMs
-        }
-    }
-
-    exit: Transition {
-        NumberAnimation {
-            property: "opacity"
-            from: 1.0
-            to: 0.0
-            duration: root.fadeDurationMs
         }
     }
 }
