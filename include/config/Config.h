@@ -157,6 +157,7 @@ class Config
             ELyricsSource::Unknown
         };
     private:
+        static std::string GetLoggableString(nlohmann::json json);
         static std::filesystem::path GetFilePath();
 
 #ifdef _WIN32

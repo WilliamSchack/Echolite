@@ -232,7 +232,7 @@ bool Config::Load(const std::filesystem::path& path)
     nlohmann::json json = nlohmann::json::parse(contents);
     FromJson(json);
 
-    Logger::Info("Loaded the config from (" + FileUtils::PathToUtf8(path) + "): " + json.dump());
+    Logger::Info("Loaded the config from (" + FileUtils::PathToUtf8(path) + "): " + GetLoggableString(json));
 
     return true;
 }
@@ -255,7 +255,7 @@ bool Config::Save(const std::filesystem::path& path)
     file << contents;
     file.close();
 
-    Logger::Info("Saved the config: " + json.dump());
+    Logger::Info("Saved the config: " + GetLoggableString(json));
 
     return true;
 }
@@ -267,6 +267,15 @@ bool Config::YouTubeCookiesValid()
 
     bool cookiesValid = YouTubeCookieFile::Get().CookiesValid();
     return cookiesValid && !YouTubePOToken.empty();
+}
+
+std::string Config::GetLoggableString(nlohmann::json json)
+{
+    // Remove sensitive data from the log file
+    json["platforms"]["youtube"]["cookies"] = YouTubeCookieFile::Get().CookiesValid() ? "Set" : "None";
+    json["platforms"]["youtube"]["poToken"] = JsonUtils::SafelyNavigate<std::string>(json, { "platforms", "youtube", "poToken"}).empty() ? "None" : "Set";
+
+    return json.dump();
 }
 
 std::filesystem::path Config::GetFilePath()
