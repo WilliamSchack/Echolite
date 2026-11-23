@@ -243,6 +243,7 @@ void MusicScreenGUI::CheckDownloadEvents()
             },
             [&](const DownloadsPausedEvent& e) {
                 emit PlayPauseButtonTextChanged();
+                emit RequestNotification("Downloads paused...");
             }
         }, event.value());
     }
