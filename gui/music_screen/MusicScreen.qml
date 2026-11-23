@@ -3,6 +3,8 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 
 Rectangle {
+    id: root
+
     radius: 10
     color: "transparent"
 
@@ -63,7 +65,7 @@ Rectangle {
                             return
                         }
 
-                        const dialog = messageDialogComponent.createObject(root.contentItem, {
+                        const dialog = messageDialogComponent.createObject(root, {
                             title: "Cancel Download",
                             text: "Are you sure you want to cancel the download?",
                             standardButtons: Dialog.Yes | Dialog.No
@@ -93,12 +95,39 @@ Rectangle {
                     onClicked: _manager.music.PlayPauseButtonClicked()
                 }
 
-                Rectangle { Layout.fillWidth: true }
-
                 Text {
                     text: "Downloads Completed: " + _manager.music.downloadsCompleted + "/" + _manager.music.tracks.length + " (" + _manager.music.downloadErrors + " Error" + (_manager.music.downloadErrors === 1 ? "" : "s") + ")"
                     font.pixelSize: 14
                     color: "white"
+
+                    leftPadding: 5
+                }
+
+                Item { Layout.fillWidth: true }
+
+                CustomButton {
+                    Layout.fillHeight: true
+
+                    visible: root.firstDownloadFinished
+
+                    text: "Support Development?"
+                    font.pixelSize: 14
+                    backgroundColour: "#A16583"
+                    radius: 8
+
+                    onClicked: {
+                        const dialog = messageDialogComponent.createObject(root, {
+                            title: "Support Development",
+                            text: "Thanks for using my app! Echolite is made by a single developer and donations make it possible for me to continue updating it\n\nWould you like to donate and support development? Even the smallest amount goes a long way :)",
+                            standardButtons: Dialog.Yes | Dialog.No
+                        })
+
+                        dialog.onAccepted.connect(function() {
+                            Qt.openUrlExternally("https://ko-fi.com/williamschack")
+                        })
+                        
+                        dialog.open()
+                    }
                 }
             }
         }
