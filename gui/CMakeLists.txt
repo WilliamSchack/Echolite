@@ -27,6 +27,7 @@ qt6_add_qml_module(${PROJECT_NAME}_qml
         common/MinorSection.qml
         common/LoadingStatus.qml
         common/HoverTooltip.qml
+        common/OverlayPopup.qml
         music_screen/MusicScreen.qml
         music_screen/Track.qml
         music_screen/AddTracksPopup.qml

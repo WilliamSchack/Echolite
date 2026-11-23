@@ -4,6 +4,11 @@ import QtQuick.Effects
 
 TextField {
     id: root
+
+    property bool hasRightLabel: false
+    property bool valid: true
+    property alias rightText: rightLabel.text
+
     implicitHeight: parent.height
     implicitWidth: 300
 
@@ -15,10 +20,6 @@ TextField {
     font.pixelSize: 14
     color: enabled ? "black" : "grey"
     selectionColor: "#35afe4"
-
-    property bool hasRightLabel: false
-    property bool valid: true
-    property alias rightText: rightLabel.text
 
     background: Rectangle {
         width: root.width
