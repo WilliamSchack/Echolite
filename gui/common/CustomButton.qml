@@ -34,6 +34,8 @@ Button {
 
     font.pixelSize: 14
 
+    focusPolicy: Qt.StrongFocus
+
     // Text
     contentItem: Item {
         implicitWidth: root.hasContent ? contentParent.implicitWidth : noContentParent.implicitWidth
@@ -110,6 +112,9 @@ Button {
     background: Rectangle {
         color: root.enabled ? (root.down ? root.pressedColour : (root.hovered ? root.hoveredColour : root.backgroundColour)) : disabledColour
         radius: root.radius
+
+        border.color: "#4ec1ff"
+        border.width: root.visualFocus ? 2 : 0
 
         // Outer Shadow
         layer.enabled: true

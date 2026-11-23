@@ -25,6 +25,9 @@ TextField {
 
         color: root.enabled ? (root.valid ? "white" : '#ffdedd') : Qt.darker("white", 1.1)
 
+        border.color: "#4ec1ff"
+        border.width: root.activeFocus ? 2 : 0
+
         Behavior on color {
             ColorAnimation {
                 duration: 200

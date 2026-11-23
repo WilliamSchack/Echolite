@@ -4,10 +4,12 @@ import QtQuick.Controls.Basic
 Switch {
     id: root
     
+    property bool initialized: false
+
     implicitHeight: parent.height
     implicitWidth: 50
 
-    property bool initialized: false
+    focusPolicy: Qt.StrongFocus
 
     contentItem: Item {}
 
@@ -15,6 +17,9 @@ Switch {
         anchors.fill: parent
         radius: 3
         color: root.checked ? "#9A607D" : "#9F9F9F"
+
+        border.color: "#4ec1ff"
+        border.width: root.visualFocus ? 2 : 0
 
         // Knob thing
         Rectangle {

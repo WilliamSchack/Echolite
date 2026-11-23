@@ -10,9 +10,14 @@ ComboBox {
 
     font.pixelSize: 14
 
+    focusPolicy: Qt.StrongFocus
+
     background: Rectangle {
         width: parent.width
         radius: 3
+
+        border.color: "#4ec1ff"
+        border.width: root.visualFocus ? 2 : 0
 
         InnerShadow {
             topEnabled: false
