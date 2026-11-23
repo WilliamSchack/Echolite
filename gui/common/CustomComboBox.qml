@@ -27,6 +27,13 @@ ComboBox {
             size: 4
             strength: 0.2
         }
+
+        Behavior on border.width {
+            NumberAnimation {
+                duration: 100
+                easing.type: Easing.OutCubic
+            }
+        }
     }
 
     contentItem: Text {

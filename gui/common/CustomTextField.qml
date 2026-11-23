@@ -37,6 +37,13 @@ TextField {
             }
         }
 
+        Behavior on border.width {
+            NumberAnimation {
+                duration: 100
+                easing.type: Easing.OutCubic
+            }
+        }
+
         InnerShadow {
             bottomEnabled: false
             rightEnabled: false

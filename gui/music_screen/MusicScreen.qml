@@ -16,6 +16,7 @@ Rectangle {
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 0
+
         spacing: 0
 
         // Header
@@ -136,6 +137,7 @@ Rectangle {
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
+
             bottomLeftRadius: 10
             bottomRightRadius: 10
 
@@ -156,6 +158,7 @@ Rectangle {
 
             ColumnLayout {
                 anchors.fill: parent
+
                 spacing: 0
 
                 // Progress Bar

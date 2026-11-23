@@ -12,8 +12,6 @@ OverlayPopup {
     }
 
     Column {
-        id: content
-
         width: parent.width
         anchors.margins: root.padding
 

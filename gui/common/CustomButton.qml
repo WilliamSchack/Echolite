@@ -144,6 +144,13 @@ Button {
                 easing.type: Easing.OutCubic
             }
         }
+
+        Behavior on border.width {
+            NumberAnimation {
+                duration: 100
+                easing.type: Easing.OutCubic
+            }
+        }
     }
 
     MouseArea {
