@@ -1368,23 +1368,24 @@ bool YTMusicAPI::HasPremium()
 
     // Used to be at line 21, now its at 20 most of the time? But it also is later sometimes?
     // I dunno just check from 20-22 it will be found
-    std::smatch matches;
-    bool matchesFound = false;
+
+    std::string jsonString = "";
     for (int i = 20; i <= 22; i++) {
         std::string jsonLine = responseLines[i];
-        std::regex_search(jsonLine, matches, std::regex(R"(ytInitialData\s=\s(.*}}}}}}});)"));
+
+        std::smatch matches;
+        std::regex_search(jsonLine, matches, std::regex(R"(ytInitialData\s=\s(.*\}\}\}\}\}\}\});)"));
 
         if (matches.size() < 2)
             continue;
         
-        matchesFound = true;
+        jsonString = matches[1];
         break;
     }
 
-    if (!matchesFound)
+    if (jsonString.empty())
         return false;
 
-    std::string jsonString = matches[1];
     nlohmann::json json = nlohmann::json::parse(jsonString);
     nlohmann::json pageSections = json["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][0]["tabRenderer"]["content"]["sectionListRenderer"]["contents"];
 
