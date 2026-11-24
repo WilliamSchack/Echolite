@@ -102,6 +102,26 @@ Rectangle {
                     color: "white"
 
                     leftPadding: 5
+
+                    // Dont let announcements queue up incase multiple downloads finish at once
+                    onTextChanged: downloadsCompletedAnnounceTimer.restart()
+
+                    Timer {
+                        id: downloadsCompletedAnnounceTimer
+                        interval: 2000
+                        
+                        onTriggered: () => {
+                            // Only announce if the app is focused
+                            if (!root.Window.active)
+                                return
+
+                            let message = "Downloads Completed: " + _manager.music.downloadsCompleted + " out of " + _manager.music.tracks.length
+                            if (_manager.music.downloadErrors != 0)
+                                message += " with " + _manager.music.downloadErrors + " error" + (_manager.music.downloadErrors === 1 ? "" : "s")
+
+                            root.Accessible.announce(message)
+                        }
+                    }
                 }
 
                 Item { Layout.fillWidth: true }
