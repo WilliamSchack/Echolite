@@ -192,9 +192,22 @@ DownloadResult TrackDownloader::DownloadTrack(const TrackData& track, const EPla
         Logger::Info(track.GetUniqueId() + ": Normalising");
         SetProgress(eventCallback, track, progressStartPercentage, "Normalising Audio...");
 
-        bool normalised = Ffmpeg::NormaliseLoudness(tempDownloadPath, Config::NormaliseLoudnessTargetLUFS, [&](float progress) {
+        std::function<void(float)> progressCallback = [&](float progress) {
             SetProgress(eventCallback, track, MathUtils::Lerp(progressStartPercentage, progressEndPercentage, progress), "Normalising Audio...");
-        });
+        };
+
+        bool normalised = false;
+        switch (Config::NormaliseType) {
+            case ENormaliseType::Loudness:
+                normalised = Ffmpeg::NormaliseLoudness(tempDownloadPath, Config::NormaliseLoudnessTargetLUFS, progressCallback);
+                break;
+            case ENormaliseType::Peak:
+                normalised = Ffmpeg::NormalisePeak(tempDownloadPath, Config::NormalisePeakTargetDb, progressCallback);
+                break;
+        }
+
+        if (!normalised)
+            Logger::Warning(track.GetUniqueId() + ": Failed to normalise");
     }
     
     // == Set bitrate
