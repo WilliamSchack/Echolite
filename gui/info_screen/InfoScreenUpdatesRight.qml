@@ -106,6 +106,8 @@ ColumnLayout {
                     visible: (root.selectedDependency.installed && !root.selectedDependency.installedOnSystem) || !root.selectedDependency.installed
 
                     onClicked: _manager.info.updates.CheckForUpdatesButtonClicked()
+
+                    Accessible.name: root.selectedDependency.name + " " + text
                 }
 
                 CustomButton {
@@ -119,6 +121,8 @@ ColumnLayout {
                     backgroundColour: "#A16583"
 
                     onClicked: _manager.info.updates.SourceButtonClicked()
+
+                    Accessible.name: root.selectedDependency.name + " " + text
                 }
             }
         }

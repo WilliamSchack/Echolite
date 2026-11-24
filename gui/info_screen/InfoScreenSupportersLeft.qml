@@ -14,6 +14,8 @@ Item {
 
         onClicked: Qt.openUrlExternally("https://ko-fi.com/williamschack")
 
+        Accessible.name: "Support Development"
+
         RowLayout {
             anchors.fill: parent
 

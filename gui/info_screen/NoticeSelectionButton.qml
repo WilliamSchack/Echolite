@@ -14,6 +14,8 @@ ToggleButton {
 
     radius: 6
 
+    Accessible.name: info.title + " Notice"
+
     onClicked: {
         _manager.info.notices.SelectNotice(info.index)
         root.info.isNew = false

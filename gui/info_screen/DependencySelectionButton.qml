@@ -47,6 +47,9 @@ ToggleButton {
         return "#9EFFA5"
     }
 
+    Accessible.name: info.name + " Dependency"
+    Accessible.description: updateAvailableText
+
     Component {
         id: messageDialogComponent
         CustomMessageDialog {}
