@@ -6,6 +6,8 @@ import QtQuick.Effects
 OverlayPopup {
     id: root
 
+    onShownFocusItem: urlInputField
+
     Component {
         id: messageDialogComponent
         CustomMessageDialog {}
@@ -38,6 +40,8 @@ OverlayPopup {
                 spacing: 5
 
                 CustomTextField {
+                    id: urlInputField
+
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
@@ -59,6 +63,8 @@ OverlayPopup {
                     iconColour: "black"
 
                     onClicked: _manager.music.addTracksPopup.PasteButtonClicked()
+
+                    Accessible.name: "Paste Url"
                 }
             }
 
@@ -89,6 +95,8 @@ OverlayPopup {
                     iconColour: "black"
 
                     onClicked: _manager.music.addTracksPopup.FolderButtonClicked()
+
+                    Accessible.name: "Select Folder"
                 }
             }
         }

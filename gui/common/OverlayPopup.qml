@@ -10,6 +10,8 @@ Rectangle {
     property int padding: 20
     property bool shown: false
 
+    property Item onShownFocusItem: null
+
     default property alias content: popupContent.data
 
     anchors.fill: parent
@@ -57,5 +59,15 @@ Rectangle {
             anchors.fill: parent
             anchors.margins: root.padding
         }
+    }
+
+    onShownChanged: {
+        if (onShownFocusItem == null || !shown)
+            return
+
+        // Call later so the item is initialised and it can be read
+        Qt.callLater(() => {
+            onShownFocusItem.forceActiveFocus()
+        })
     }
 }

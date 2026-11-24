@@ -6,6 +6,8 @@ import Echolite.Info.Updates
 OverlayPopup {
     id: root
 
+    onShownFocusItem: downloadButton
+
     Column {
         width: parent.width
 
@@ -50,6 +52,8 @@ OverlayPopup {
         }
 
         CustomButton {
+            id: downloadButton
+
             width: parent.width
             height: 40
 
