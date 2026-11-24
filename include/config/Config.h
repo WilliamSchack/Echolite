@@ -50,8 +50,8 @@ class Config
             {EExtension::WEBM, 128}
         };
         static inline std::map<EExtension, ELosslessCodecFormat> LosslessFormats = {
-            {EExtension::WAV, ELosslessCodecFormat::B16H44100},
-            {EExtension::FLAC, ELosslessCodecFormat::B16H44100}
+            {EExtension::WAV, ELosslessCodecFormat::B16H48000},
+            {EExtension::FLAC, ELosslessCodecFormat::B16H48000}
         };
 
         // Metadata
