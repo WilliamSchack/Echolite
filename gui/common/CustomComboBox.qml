@@ -12,6 +12,8 @@ ComboBox {
 
     focusPolicy: Qt.StrongFocus
 
+    Accessible.description: displayText
+
     background: Rectangle {
         width: parent.width
         radius: 3
@@ -58,6 +60,9 @@ ComboBox {
 
         topPadding: 3
         bottomPadding: 3
+
+        Accessible.name: modelData
+        Accessible.focused: root.popup.visible && highlighted
 
         contentItem: Text {
             text: modelData

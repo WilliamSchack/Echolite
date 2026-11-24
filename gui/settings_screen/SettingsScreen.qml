@@ -308,6 +308,8 @@ RowLayout {
                                     model: _manager.settings.GetCodecOptions()
                                     currentIndex: _manager.settings.codec
                                     onActivated: (index) => { _manager.settings.codec = index }
+
+                                    Accessible.name: "Audio Codec"
                                 }
                             }
 
@@ -320,6 +322,8 @@ RowLayout {
 
                                     checked: _manager.settings.normalise
                                     onClicked: _manager.settings.normalise = checked
+
+                                    Accessible.name: "Normalise Volume Enabled"
                                 }
 
                                 DoubleTextField {
@@ -337,6 +341,8 @@ RowLayout {
 
                                     boundValue: _manager.settings.normaliseDb
                                     onValueChanged: (value) => { _manager.settings.normaliseDb = value }
+
+                                    Accessible.name: "Normalise Volume Decibels"
                                 }
                             }
 
@@ -353,6 +359,8 @@ RowLayout {
 
                                     currentIndex: _manager.settings.manualBitrate ? 1 : 0
                                     onActivated: (index) => { _manager.settings.manualBitrate = index == 1 }
+
+                                    Accessible.name: "Audio Bitrate Quality"
                                 }
 
                                 IntTextField {
@@ -384,6 +392,8 @@ RowLayout {
 
                                     boundValue: _manager.settings.bitrate
                                     onValueChanged: (value) => { _manager.settings.bitrate = value }
+
+                                    Accessible.name: "Audio Bitrate Kilobytes Per Second"
                                 }
                             }
 
@@ -402,6 +412,8 @@ RowLayout {
 
                                     currentIndex: _manager.settings.losslessFormat
                                     onActivated: (index) => { _manager.settings.losslessFormat = index }
+
+                                    Accessible.name: "Audio Format"
                                 }
                             }
                         }
@@ -419,6 +431,8 @@ RowLayout {
 
                                     checked: _manager.settings.getLyrics
                                     onClicked: _manager.settings.getLyrics = checked
+
+                                    Accessible.name: "Get Lyrics"
                                 }
                             }
 
@@ -434,6 +448,8 @@ RowLayout {
 
                                     text: _manager.settings.artistsSeparator
                                     onTextEdited: _manager.settings.artistsSepanrator = text
+
+                                    Accessible.name: "Artist Separator"
                                 }
                             }
 
@@ -450,6 +466,8 @@ RowLayout {
                                     model: _manager.settings.GetTrackNumberTypeOptions()
                                     currentIndex: _manager.settings.trackNumberType
                                     onActivated: (index) => { _manager.settings.trackNumberType = index }
+
+                                    Accessible.name: "Track Number"
                                 }
                             }
                         }
@@ -459,7 +477,7 @@ RowLayout {
                             label: "File Management"
 
                             SettingsItem {
-                                label: "Overwrite"
+                                label: "Overwrite Existing Files"
                                 tooltip: "Overwrites existing files only if they have the same metadata"
 
                                 CustomSwitch {
@@ -467,6 +485,8 @@ RowLayout {
 
                                     checked: _manager.settings.overwrite
                                     onClicked: _manager.settings.overwrite = checked
+
+                                    Accessible.name: "Overwrite Existing Files"
                                 }
                             }
 
@@ -483,6 +503,8 @@ RowLayout {
 
                                     text: _manager.settings.defaultSaveLocation
                                     onTextEdited: _manager.settings.defaultSaveLocation = text
+
+                                    Accessible.name: "Default Save Location"
                                 }
 
                                 CustomButton {
@@ -494,6 +516,8 @@ RowLayout {
                                     iconMargins: 8
 
                                     onClicked: _manager.settings.DefaultSaveLocationButtonClicked()
+
+                                    Accessible.name: "Select Folder"
                                 }
                             }
 
@@ -507,6 +531,8 @@ RowLayout {
 
                                     text: _manager.settings.fileNameTagsOpeningChar
                                     onTextEdited: _manager.settings.fileNameTagsOpeningChar = text
+
+                                    Accessible.name: "File Name Tag Opening Character"
                                 }
 
                                 SingleCharTextField {
@@ -514,6 +540,8 @@ RowLayout {
 
                                     text: _manager.settings.fileNameTagsClosingChar
                                     onTextEdited: _manager.settings.fileNameTagsClosingChar = text
+
+                                    Accessible.name: "File Name Tag Closing Character"
                                 }
 
                                 CustomTextField {
@@ -526,6 +554,8 @@ RowLayout {
                                     onTextEdited: _manager.settings.fileName = text
 
                                     valid: _manager.settings.fileNameError === ""
+
+                                    Accessible.name: "File Name"
                                 }
                             }
 
@@ -539,6 +569,8 @@ RowLayout {
 
                                     text: _manager.settings.subFoldersTagsOpeningChar
                                     onTextEdited: _manager.settings.subFoldersTagsOpeningChar = text
+
+                                    Accessible.name: "Sub Folders Tag Opening Character"
                                 }
 
                                 SingleCharTextField {
@@ -546,6 +578,8 @@ RowLayout {
 
                                     text: _manager.settings.subFoldersTagsClosingChar
                                     onTextEdited: _manager.settings.subFoldersTagsClosingChar = text
+
+                                    Accessible.name: "Sub Folders Tag Closing Character"
                                 }
 
                                 CustomTextField {
@@ -558,6 +592,8 @@ RowLayout {
                                     onTextEdited: _manager.settings.subFolders = text
 
                                     valid: _manager.settings.subFoldersError === ""
+
+                                    Accessible.name: "Sub Folders"
                                 }
                             }
                         }
@@ -575,6 +611,8 @@ RowLayout {
 
                                     checked: _manager.settings.createLyricsFile
                                     onClicked: _manager.settings.createLyricsFile = checked
+
+                                    Accessible.name: "Create Lyrics File On Download"
                                 }
                             }
 
@@ -588,6 +626,8 @@ RowLayout {
 
                                     text: _manager.settings.lyricsFileNameTagsOpeningChar
                                     onTextEdited: _manager.settings.lyricsFileNameTagsOpeningChar = text
+
+                                    Accessible.name: "Lyrics File Path Tag Opening Character"
                                 }
 
                                 SingleCharTextField {
@@ -595,6 +635,8 @@ RowLayout {
 
                                     text: _manager.settings.lyricsFileNameTagsClosingChar
                                     onTextEdited: _manager.settings.lyricsFileNameTagsClosingChar = text
+
+                                    Accessible.name: "Lyrics File Path Tag Closing Character"
                                 }
 
                                 CustomTextField {
@@ -607,6 +649,8 @@ RowLayout {
                                     onTextEdited: _manager.settings.lyricsFileName = text
 
                                     valid: _manager.settings.lyricsFileNameError === ""
+
+                                    Accessible.name: "Lyrics File Path"
                                 }
                             }
                         }
@@ -624,6 +668,8 @@ RowLayout {
 
                                     checked: _manager.settings.createPlaylistFile
                                     onClicked: _manager.settings.createPlaylistFile = checked
+
+                                    Accessible.name: "Create Playlist File On Download"
                                 }
                             }
 
@@ -640,6 +686,8 @@ RowLayout {
                                     model: _manager.settings.GetPlaylistFileTypeOptions()
                                     currentIndex: _manager.settings.playlistFileType
                                     onActivated: (index) => { _manager.settings.playlistFileType = index }
+
+                                    Accessible.name: "Playlist File Type"
                                 }
                             }
 
@@ -653,6 +701,8 @@ RowLayout {
 
                                     text: _manager.settings.playlistFileNameTagsOpeningChar
                                     onTextEdited: _manager.settings.playlistFileNameTagsOpeningChar = text
+
+                                    Accessible.name: "Playlist File Path Tag Opening Character"
                                 }
 
                                 SingleCharTextField {
@@ -660,6 +710,8 @@ RowLayout {
 
                                     text: _manager.settings.playlistFileNameTagsClosingChar
                                     onTextEdited: _manager.settings.playlistFileNameTagsClosingChar = text
+
+                                    Accessible.name: "Playlist File Path Tag Closing Character"
                                 }
 
                                 CustomTextField {
@@ -672,6 +724,8 @@ RowLayout {
                                     onTextEdited: _manager.settings.playlistFileName = text
 
                                     valid: _manager.settings.playlistFileNameError === ""
+
+                                    Accessible.name: "Playlist File Path"
                                 }
                             }
                         }
@@ -699,6 +753,8 @@ RowLayout {
 
                                     boundValue: _manager.settings.downloadThreads
                                     onValueChanged: (value) => { _manager.settings.downloadThreads = value }
+
+                                    Accessible.name: "Max Simultaneous Downloads"
                                 }
                             }
 
@@ -719,6 +775,8 @@ RowLayout {
 
                                     boundValue: _manager.settings.downloadSpeedLimit
                                     onValueChanged: (value) => { _manager.settings.downloadSpeedLimit = value }
+
+                                    Accessible.name: "Download Speed Limit Megabytes Per Second"
                                 }
                             }
 
@@ -739,6 +797,8 @@ RowLayout {
 
                                     boundValue: _manager.settings.downloadTimeoutMs
                                     onValueChanged: (value) => { _manager.settings.downloadTimeoutMs = value }
+
+                                    Accessible.name: "Download Timeout Milliseconds"
                                 }
                             }
 
@@ -755,6 +815,8 @@ RowLayout {
                                     model: _manager.settings.GetIPVersionOptions()
                                     currentIndex: _manager.settings.ipVersion
                                     onActivated: (index) => { _manager.settings.ipVersion = index }
+
+                                    Accessible.name: "IP Version"
                                 }
                             }
                         }
@@ -801,6 +863,8 @@ RowLayout {
                                     font.bold: true
 
                                     onClicked: _manager.settings.YouTubeCookiesOpenButtonClicked();
+
+                                    Accessible.name: "YouTube Cookies Open File"
                                 }
 
                                 // Paste
@@ -813,6 +877,8 @@ RowLayout {
                                     iconMargins: 8
 
                                     onClicked: _manager.settings.YouTubeCookiesPasteButtonClicked()
+
+                                    Accessible.name: "YouTube Cookies Paste"
                                 }
 
                                 // Clear
@@ -824,6 +890,8 @@ RowLayout {
                                     iconColour: "black"
 
                                     onClicked: _manager.settings.YouTubeCookiesClearButtonClicked()
+                                    
+                                    Accessible.name: "YouTube Cookies Clear"
                                 }
                             }
 
@@ -839,6 +907,8 @@ RowLayout {
 
                                     text: _manager.settings.youtubePOToken
                                     onTextEdited: _manager.settings.youtubePOToken = text
+
+                                    Accessible.name: "YouTube PO Token"
                                 }
 
                                 // Paste
@@ -851,6 +921,8 @@ RowLayout {
                                     iconMargins: 8
 
                                     onClicked: _manager.settings.YouTubePOTokenPasteButtonClicked()
+
+                                    Accessible.name: "YouTube PO Token Paste"
                                 }
 
                                 // Clear
@@ -862,6 +934,8 @@ RowLayout {
                                     iconColour: "black"
 
                                     onClicked: _manager.settings.YouTubePOTokenClearButtonClicked()
+
+                                    Accessible.name: "YouTube PO Token Clear"
                                 }
                             }
                         }
@@ -883,6 +957,8 @@ RowLayout {
 
                                     checked: _manager.settings.showStatusNotifications
                                     onClicked: _manager.settings.showStatusNotifications = checked
+
+                                    Accessible.name: "Show Status Notifications"
                                 }
                             }
 
@@ -895,6 +971,8 @@ RowLayout {
 
                                     checked: _manager.settings.autoOpenDownloadFolder
                                     onClicked: _manager.settings.autoOpenDownloadFolder = checked
+
+                                    Accessible.name: "Auto Open Download Folder"
                                 }
                             }
                         }
@@ -912,6 +990,8 @@ RowLayout {
 
                                     checked: _manager.settings.autoCheckForUpdates
                                     onClicked: _manager.settings.autoCheckForUpdates = checked
+
+                                    Accessible.name: "Check For Updates On App Start"
                                 }
                             }
 
@@ -924,6 +1004,8 @@ RowLayout {
 
                                     checked: _manager.settings.autoCheckForNotices
                                     onClicked: _manager.settings.autoCheckForNotices = checked
+
+                                    Accessible.name: "Check For Notices On App Start"
                                 }
                             }
                         }
@@ -941,6 +1023,8 @@ RowLayout {
 
                                     checked: _manager.settings.randomDefaultBackground
                                     onClicked: _manager.settings.randomDefaultBackground = checked
+
+                                    Accessible.name: "Random Default Background"
                                 }
                             }
 
@@ -956,6 +1040,8 @@ RowLayout {
 
                                     text: _manager.settings.defaultBackgroundUrl
                                     onTextEdited: _manager.settings.defaultBackgroundUrl = text
+
+                                    Accessible.name: "Default Background Url"
                                 }
 
                                 CustomButton {
@@ -972,6 +1058,8 @@ RowLayout {
                                         _manager.settings.randomDefaultBackground = false
                                         _manager.music.BackgroundApplyButtonClicked()
                                     }
+
+                                    Accessible.name: "Default Background Url Apply"
                                 }
                             }
                         }
@@ -1007,6 +1095,8 @@ RowLayout {
                                         })
                                         dialog.open()
                                     }
+
+                                    Accessible.name: "Import Settings File"
                                 }
                             }
 
@@ -1035,6 +1125,8 @@ RowLayout {
                                             dialog.open()
                                         }
                                     }
+
+                                    Accessible.name: "Export Settings File"
                                 }
                             }
                         }
@@ -1057,6 +1149,8 @@ RowLayout {
                                     font.bold: true
 
                                     onClicked: _manager.settings.OpenLogsFolderButtonClicked();
+
+                                    Accessible.name: "Open Logs Folder"
                                 }
                             }
                         }
