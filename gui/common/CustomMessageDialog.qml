@@ -51,6 +51,9 @@ Dialog {
         font.pixelSize: 14
         wrapMode: Text.WordWrap
         horizontalAlignment: TextInput.AlignHCenter
+
+        Accessible.name: root.text
+        Accessible.focusable: true
     }
 
     footer: DialogButtonBox {
@@ -94,6 +97,10 @@ Dialog {
                 duration: root.fadeDurationMs
             }
         }
+    }
+
+    onOpened: {
+        contentItem.forceActiveFocus()
     }
 
     onClosed: {
