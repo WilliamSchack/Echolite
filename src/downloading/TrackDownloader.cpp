@@ -188,11 +188,11 @@ DownloadResult TrackDownloader::DownloadTrack(const TrackData& track, const EPla
     float progressStartPercentage = 0.7;
     float progressEndPercentage = Config::GetLyrics ? 0.9 : 1.0;
 
-    if (Config::Normalise) {
+    if (Config::NormaliseType != ENormaliseType::None) {
         Logger::Info(track.GetUniqueId() + ": Normalising");
         SetProgress(eventCallback, track, progressStartPercentage, "Normalising Audio...");
 
-        bool normalised = Ffmpeg::NormaliseLoudness(tempDownloadPath, Config::NormaliseDb, [&](float progress) {
+        bool normalised = Ffmpeg::NormaliseLoudness(tempDownloadPath, Config::NormaliseLoudnessTargetLUFS, [&](float progress) {
             SetProgress(eventCallback, track, MathUtils::Lerp(progressStartPercentage, progressEndPercentage, progress), "Normalising Audio...");
         });
     }

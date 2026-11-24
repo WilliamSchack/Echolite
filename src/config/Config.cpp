@@ -8,8 +8,9 @@ nlohmann::ordered_json Config::ToJson()
         { "output", {
             { "audio", {
                 { "codecExtension", EEXTENSION_NAMES[(int)CodecExtension] },
-                { "normalise", Normalise },
-                { "normaliseDb", NormaliseDb },
+                { "normaliseType", ENORMALISETYPE_NAMES[(int)NormaliseType] },
+                { "normaliseLoudnessTargetLUFS", NormaliseLoudnessTargetLUFS },
+                { "normalisePeakTargetDb", NormalisePeakTargetDb },
                 { "manualBitrate", ManualBitrate },
                 { "bitrate", nlohmann::ordered_json::object() } // Filled later
             }},
@@ -117,8 +118,9 @@ void Config::FromJson(const nlohmann::json& json)
 
     // Audio
     CodecExtension = JsonUtils::ReadStringEnum<EExtension>(json, { "output", "audio", "codecExtension" }, EEXTENSION_NAMES, CodecExtension);
-    Normalise = JsonUtils::SafelyNavigate<bool>(json, { "output", "audio", "normalise" }, Normalise);
-    NormaliseDb = JsonUtils::SafelyNavigate<double>(json, { "output", "audio", "normaliseDb" }, NormaliseDb);
+    NormaliseType = JsonUtils::ReadStringEnum<ENormaliseType>(json, { "output", "audio", "normaliseType" }, ENORMALISETYPE_NAMES, NormaliseType);
+    NormaliseLoudnessTargetLUFS = JsonUtils::SafelyNavigate<double>(json, { "output", "audio", "normaliseLoudnessTargetLUFS" }, NormaliseLoudnessTargetLUFS);
+    NormalisePeakTargetDb = JsonUtils::SafelyNavigate<double>(json, { "output", "audio", "normalisePeakTargetDb" }, NormalisePeakTargetDb);
     ManualBitrate = JsonUtils::SafelyNavigate<bool>(json, { "output", "audio", "manualBitrate" }, ManualBitrate);
 
     nlohmann::json bitrateJson = JsonUtils::SafelyNavigate(json, { "output", "audio", "bitrate" });
@@ -200,6 +202,9 @@ void Config::FromJson(const nlohmann::json& json)
     // Background
     RandomDefaultBackground = JsonUtils::SafelyNavigate<bool>(json, { "interface", "background", "randomDefaultBackground" }, RandomDefaultBackground);
     DefaultBackgroundUrl = JsonUtils::SafelyNavigate<std::string>(json, { "interface", "background", "defaultBackgroundUrl" }, DefaultBackgroundUrl);
+
+    // Check and parse any values from previous versions
+    ParseOldConfigValues(json);
 }
 
 bool Config::Load()
@@ -291,6 +296,18 @@ std::filesystem::path Config::GetFilePath()
     return _filePathCache;
 }
 
+void Config::ParseOldConfigValues(const nlohmann::json& json)
+{
+    // Pre v2.1.0
+    nlohmann::json normaliseEnabledJson = JsonUtils::SafelyNavigate(json, { "output", "audio", "normalise" });
+    if (!normaliseEnabledJson.empty()) {
+        bool normaliseEnabled = normaliseEnabledJson.get<bool>();
+        NormaliseType = normaliseEnabled ? ENormaliseType::Loudness : ENormaliseType::None;
+
+        NormaliseLoudnessTargetLUFS = JsonUtils::SafelyNavigate<double>(json, { "output", "audio", "normaliseDb" }, NormaliseLoudnessTargetLUFS);
+    }
+}
+
 #ifdef _WIN32
 void Config::LoadV1Config()
 {
@@ -305,8 +322,8 @@ void Config::LoadV1Config()
     Overwrite = settings.value("overwriteEnabled", Overwrite).toBool();
     CodecExtension = (EExtension)settings.value("codecIndex", (int)CodecExtension).toInt();
     TrackNumberType = (ETrackNumberType)settings.value("trackNumberIndex", (int)TrackNumberType).toInt();
-    Normalise = settings.value("normalizeEnabled", Normalise).toBool();
-    NormaliseDb = settings.value("normalizeVolume", NormaliseDb).toFloat();
+    NormaliseType = settings.value("normalizeEnabled", true).toBool() ? ENormaliseType::Loudness : ENormaliseType::None;
+    NormaliseLoudnessTargetLUFS = settings.value("normalizeVolume", NormaliseLoudnessTargetLUFS).toDouble();
     GetLyrics = settings.value("getLyrics", GetLyrics).toBool();
     ManualBitrate = !settings.value("automaticBestQuality", !ManualBitrate).toBool();
     BitrateKbps[EExtension::M4A] = settings.value("audioBitrateM4A", BitrateKbps[EExtension::M4A]).toInt();

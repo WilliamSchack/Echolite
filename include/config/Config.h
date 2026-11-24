@@ -3,6 +3,7 @@
 
 #include "Logger.h"
 #include "EExtension.h"
+#include "ENormaliseType.h"
 #include "ELyricsSource.h"
 #include "EPlaylistFileType.h"
 #include "ETrackNumberType.h"
@@ -35,8 +36,9 @@ class Config
     public:
         // Audio
         static inline EExtension CodecExtension = EExtension::MP3;
-        static inline bool Normalise = true;
-        static inline double NormaliseDb = -14.0;
+        static inline ENormaliseType NormaliseType = ENormaliseType::Loudness;
+        static inline double NormaliseLoudnessTargetLUFS = -14.0;
+        static inline double NormalisePeakTargetDb = -1.0;
         static inline bool ManualBitrate = false;
         static inline std::map<EExtension, int> BitrateKbps = {
             {EExtension::M4A,  128},
@@ -159,6 +161,8 @@ class Config
     private:
         static std::string GetLoggableString(nlohmann::json json);
         static std::filesystem::path GetFilePath();
+
+        static void ParseOldConfigValues(const nlohmann::json& json);
 
 #ifdef _WIN32
         static void LoadV1Config();

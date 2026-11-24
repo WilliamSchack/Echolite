@@ -22,8 +22,8 @@ class SettingsScreenGUI : public QObject
 {
     Q_OBJECT
     ENUM_QPROPERTY(EExtension, EEXTENSION_NAMES, codec, Codec, Config::CodecExtension)
-    SIMPLE_QPROPERTY(bool, normalise, Normalise, Config::Normalise)
-    SIMPLE_QPROPERTY(double, normaliseDb, NormaliseDb, Config::NormaliseDb)
+    //SIMPLE_QPROPERTY(bool, normalise, Normalise, Config::Normalise)
+    //SIMPLE_QPROPERTY(double, normaliseDb, NormaliseDb, Config::NormaliseDb)
     SIMPLE_QPROPERTY(bool, manualBitrate, ManualBitrate, Config::ManualBitrate)
     SIMPLE_QPROPERTY(int, bitrate, Bitrate, Config::BitrateKbps[Config::CodecExtension])
     Q_PROPERTY(int bitrateMax READ GetBitrateMax NOTIFY BitrateMaxChanged)
