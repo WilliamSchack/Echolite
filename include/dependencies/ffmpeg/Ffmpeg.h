@@ -42,6 +42,8 @@ class Ffmpeg : public Dependency<Ffmpeg>
         static std::vector<GitHubRelease> GetReleasesImpl(const int& resultsPerPage, const int& page);
         
         static std::string Execute(const FfmpegAudioDetails& audioDetails, const std::vector<std::string>& args, const std::function<void(float)>& progressCallback = nullptr);
+    private:
+        static inline const float MAXIMUM_TRUE_PEAK = -1.0;
 };
 
 #endif

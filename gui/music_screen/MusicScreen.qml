@@ -133,7 +133,7 @@ Rectangle {
 
                     visible: root.firstDownloadFinished
 
-                    text: "Support Development?"
+                    text: "Support Development"
                     font.pixelSize: 14
                     backgroundColour: "#A16583"
                     radius: 8

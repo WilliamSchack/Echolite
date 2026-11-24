@@ -320,7 +320,12 @@ bool Ffmpeg::Normalise(const std::filesystem::path& filePath, const float& targe
     std::filesystem::path tempPath = filePath;
     tempPath.replace_filename(FileUtils::PathToUtf8(filePath.stem()) + "_ffmpeg" + FileUtils::PathToUtf8(filePath.extension()));
 
-    float dbDifference = (targetDb - audioDetails.MeanDB) + 0.4;  // Adding 0.4 here since normalized is always average 0.4-0.5 off of normalized target IDK why
+    float gainDb = targetDb - audioDetails.IntegratedLoudnessLUFS;
+
+    // Cap the peak
+    float predictedPeak = audioDetails.TruePeakDBFS + gainDb;
+    if (predictedPeak > MAXIMUM_TRUE_PEAK)
+        gainDb = MAXIMUM_TRUE_PEAK - audioDetails.TruePeakDBFS;
 
     // Normalise
     std::vector<std::string> args {
@@ -329,7 +334,7 @@ bool Ffmpeg::Normalise(const std::filesystem::path& filePath, const float& targe
         "-progress", "-",
         "-nostats",
         "-nostdin",
-        "-af", "volume=" + std::to_string(dbDifference) + "dB"
+        "-af", "volume=" + std::to_string(gainDb) + "dB"
     };
 
     if (!codec->GetBitrateDetails().LockedBirtate && audioDetails.Bitrate > 0) {
