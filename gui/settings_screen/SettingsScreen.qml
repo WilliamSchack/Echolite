@@ -332,8 +332,8 @@ RowLayout {
                             }
 
                             SettingsItem {
-                                label: "Normalise Loudness Target LUFS"
-                                tooltip: "The LUFS value to target\n\n**Loud:** -11LUFS<br />**Normal:** -14LUFS<br />**Quiet:** -17LUFS"
+                                label: "Normalise Target"
+                                tooltip: "The integrated loudness LUFS value to target\n\n**Loud:** -11LUFS<br />**Normal:** -14LUFS<br />**Quiet:** -17LUFS"
                                 visible: _manager.settings.normaliseType === 1 // ENormaliseType::Loudness
 
                                 DoubleTextField {
@@ -357,8 +357,8 @@ RowLayout {
                             }
 
                             SettingsItem {
-                                label: "Normalise Peak Target dB"
-                                tooltip: "The dB value to target"
+                                label: "Normalise Target"
+                                tooltip: "The true peak dB value to target"
                                 visible: _manager.settings.normaliseType === 2 // ENormaliseType::Peak
 
                                 DoubleTextField {
