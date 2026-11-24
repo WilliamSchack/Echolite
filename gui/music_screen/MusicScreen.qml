@@ -162,32 +162,25 @@ Rectangle {
                 spacing: 0
 
                 // Progress Bar
-                ProgressBar {
-                    id: progressBar
-
+                Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 5
 
-                    value: _manager.music.tracks.length > 0 ? (_manager.music.downloadsCompleted / _manager.music.tracks.length) : 0
+                    color: Qt.alpha('#6a6a6a', 0.2)
 
-                    background: Rectangle {
-                        color: Qt.alpha('#6a6a6a', 0.2)
-                    }
-
-                    contentItem: Item {
+                    Rectangle {
                         visible: _manager.music.tracks.length > 0
 
-                        Rectangle {
-                            width: progressBar.width * progressBar.visualPosition
-                            height: progressBar.height
-                            color: Qt.alpha('#4DFF36', 0.4)
-                        }
-                    }
+                        width: parent.width * (_manager.music.tracks.length > 0 ? (_manager.music.downloadsCompleted / _manager.music.tracks.length) : 0)
+                        height: parent.height
 
-                    Behavior on value {
-                        NumberAnimation {
-                            duration: 500
-                            easing.type: Easing.InOutCubic
+                        color: Qt.alpha('#4DFF36', 0.4)
+
+                        Behavior on width {
+                            NumberAnimation {
+                                duration: 500
+                                easing.type: Easing.InOutCubic
+                            }
                         }
                     }
                 }
