@@ -125,7 +125,7 @@ void Config::FromJson(const nlohmann::json& json)
 
     nlohmann::json bitrateJson = JsonUtils::SafelyNavigate(json, { "output", "audio", "bitrate" });
     for (const auto& [key, val] : bitrateJson.items()) {
-        if (!val.is_string())
+        if (!val.is_number_integer())
             continue;
 
         int indexOfExtension = VectorUtils::IndexOf(EEXTENSION_NAMES, key);
