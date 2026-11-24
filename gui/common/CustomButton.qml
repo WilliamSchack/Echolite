@@ -36,6 +36,9 @@ Button {
 
     focusPolicy: Qt.StrongFocus
 
+    Accessible.role: Accessible.Button
+    Accessible.name: text
+
     // Text
     contentItem: Item {
         implicitWidth: root.hasContent ? contentParent.implicitWidth : noContentParent.implicitWidth

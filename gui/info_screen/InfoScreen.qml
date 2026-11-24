@@ -82,6 +82,8 @@ RowLayout {
                         checked: true
 
                         onClicked: root.switchInfoScreen(InfoScreen.EInfoScreen.Updates)
+
+                        Accessible.name: "Updates Screen"
                     }
 
                     ToggleButton {
@@ -96,6 +98,8 @@ RowLayout {
                         unselectedBackgroundColour: _manager.info.notices.newNoticeAvailable ? Qt.alpha('#b32222', 0.6) : Qt.alpha("#707070", 0.6)
 
                         onClicked: root.switchInfoScreen(InfoScreen.EInfoScreen.Notices)
+
+                        Accessible.name: "Notices Screen"
                     }
 
                     ToggleButton {
@@ -110,6 +114,8 @@ RowLayout {
                         unselectedBackgroundColour: Qt.alpha("#707070", 0.6)
 
                         onClicked: root.switchInfoScreen(InfoScreen.EInfoScreen.Supporters)
+
+                        Accessible.name: "Supporters Screen"
                     }
                 }
 

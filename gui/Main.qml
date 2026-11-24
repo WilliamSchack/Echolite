@@ -159,6 +159,8 @@ Window {
                         checked: true
 
                         onClicked: root.switchScreen(Main.EScreen.Main)
+
+                        Accessible.name: "Music Screen"
                     }
 
                     ToggleButton {
@@ -172,6 +174,8 @@ Window {
                         unselectedBackgroundColour: (!_manager.info.updates.allInstalled || _manager.info.updates.anyUpdateAvailable || _manager.info.notices.newNoticeAvailable) ? Qt.alpha('#b32222', 0.8) : Qt.alpha("#3A3A3A", 0.5)
 
                         onClicked: root.switchScreen(Main.EScreen.Info)
+
+                        Accessible.name: "Info Screen"
                     }
 
                     ToggleButton {
@@ -185,6 +189,8 @@ Window {
                         radius: 10
 
                         onClicked: root.switchScreen(Main.EScreen.Settings)
+
+                        Accessible.name: "Settings Screen"
                     }
                 }
 
@@ -204,6 +210,8 @@ Window {
                     backgroundColour: "#434343"
 
                     onClicked: root.showMinimized()
+
+                    Accessible.name: "Minimise Window"
                 }
 
                 // Maximise
@@ -220,6 +228,8 @@ Window {
                     backgroundColour: "#434343"
 
                     onClicked: root.visibility === Window.Maximized ? root.showNormal() : root.showMaximized()
+
+                    Accessible.name: "Maximise Window"
                 }
 
                 // Close
@@ -236,6 +246,8 @@ Window {
                     backgroundColour: "#434343"
 
                     onClicked: root.close()
+
+                    Accessible.name: "Close Window"
                 }
             }
 
