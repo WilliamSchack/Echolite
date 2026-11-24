@@ -192,7 +192,7 @@ void DependencyInfo::DownloadUpdate()
                 SetUpdateAvailable(false);
                 UpdateVersion();
             } else {
-                Logger::Warning("Failed to update " + _name.toStdString());
+                Logger::Warning("Failed to update " + _name.toStdString() + ": " + updateErrorString);
                 SetUpdateAvailable(true);
 
                 emit updateError(QString::fromStdString(updateErrorString));
@@ -222,7 +222,7 @@ void DependencyInfo::Download()
                 UpdateVersion();
                 SetUpdateAvailable(false);
             } else {
-                Logger::Warning("Failed to download " + _name.toStdString());
+                Logger::Warning("Failed to download " + _name.toStdString() + ": " + downloadErrorString);
 
                 emit downloadError(QString::fromStdString(downloadErrorString));
             }
