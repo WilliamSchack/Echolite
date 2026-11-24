@@ -192,7 +192,7 @@ DownloadResult TrackDownloader::DownloadTrack(const TrackData& track, const EPla
         Logger::Info(track.GetUniqueId() + ": Normalising");
         SetProgress(eventCallback, track, progressStartPercentage, "Normalising Audio...");
 
-        bool normalised = Ffmpeg::Normalise(tempDownloadPath, Config::NormaliseDb, [&](float progress) {
+        bool normalised = Ffmpeg::NormaliseLoudness(tempDownloadPath, Config::NormaliseDb, [&](float progress) {
             SetProgress(eventCallback, track, MathUtils::Lerp(progressStartPercentage, progressEndPercentage, progress), "Normalising Audio...");
         });
     }

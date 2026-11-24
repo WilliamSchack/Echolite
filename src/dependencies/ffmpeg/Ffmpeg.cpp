@@ -308,7 +308,7 @@ std::filesystem::path Ffmpeg::Convert(const std::filesystem::path& filePath, con
     return newPath;
 }
 
-bool Ffmpeg::Normalise(const std::filesystem::path& filePath, const float& targetDb, std::function<void(float)> progressCallback)
+bool Ffmpeg::Normalise(const std::filesystem::path& filePath, const std::function<float(const FfmpegAudioDetails&)>& gainFunction, std::function<void(float)> progressCallback)
 {
     if (!std::filesystem::exists(filePath))
         return false;
@@ -320,12 +320,7 @@ bool Ffmpeg::Normalise(const std::filesystem::path& filePath, const float& targe
     std::filesystem::path tempPath = filePath;
     tempPath.replace_filename(FileUtils::PathToUtf8(filePath.stem()) + "_ffmpeg" + FileUtils::PathToUtf8(filePath.extension()));
 
-    float gainDb = targetDb - audioDetails.IntegratedLoudnessLUFS;
-
-    // Cap the peak
-    float predictedPeak = audioDetails.TruePeakDBFS + gainDb;
-    if (predictedPeak > MAXIMUM_TRUE_PEAK)
-        gainDb = MAXIMUM_TRUE_PEAK - audioDetails.TruePeakDBFS;
+    float gainDb = gainFunction(audioDetails);
 
     // Normalise
     std::vector<std::string> args {
@@ -354,6 +349,27 @@ bool Ffmpeg::Normalise(const std::filesystem::path& filePath, const float& targe
     std::filesystem::rename(tempPath, filePath);
 
     return true;
+}
+
+bool Ffmpeg::NormaliseLoudness(const std::filesystem::path& filePath, const float& targetLUFS, std::function<void(float)> progressCallback)
+{
+    return Normalise(filePath, [&targetLUFS](const FfmpegAudioDetails& audioDetails) {
+        float gainDb = targetLUFS - audioDetails.IntegratedLoudnessLUFS;
+
+        // Cap the peak
+        float predictedPeak = audioDetails.TruePeakDBFS + gainDb;
+        if (predictedPeak > MAXIMUM_TRUE_PEAK)
+            gainDb = MAXIMUM_TRUE_PEAK - audioDetails.TruePeakDBFS;
+
+        return gainDb;
+    }, progressCallback);
+}
+
+bool Ffmpeg::NormalisePeak(const std::filesystem::path& filePath, const float& targetDb, std::function<void(float)> progressCallback)
+{
+    return Normalise(filePath, [&targetDb](const FfmpegAudioDetails& audioDetails) {
+        return targetDb - audioDetails.TruePeakDBFS;
+    }, progressCallback);
 }
 
 bool Ffmpeg::SetBitrate(const std::filesystem::path& filePath, const unsigned int& bitrate, std::function<void(float)> progressCallback)
