@@ -309,7 +309,7 @@ std::filesystem::path Ffmpeg::Convert(const std::filesystem::path& filePath, con
 
     if (!targetCodec->GetBitrateDetails().LockedBirtate && audioDetails.Bitrate > 0) {
         args.push_back("-b:a");
-        args.push_back(std::to_string(RoundUpBitrate(audioDetails.Bitrate)) + "k");
+        args.push_back(std::to_string(audioDetails.Bitrate) + "k");
     }
 
     args.push_back(FileUtils::PathToUtf8(newPath));
@@ -363,7 +363,7 @@ bool Ffmpeg::Normalise(const std::filesystem::path& filePath, const std::functio
 
     if (!codec->GetBitrateDetails().LockedBirtate && audioDetails.Bitrate > 0) {
         args.push_back("-b:a");
-        args.push_back(std::to_string(RoundUpBitrate(audioDetails.Bitrate)) + "k");
+        args.push_back(std::to_string(audioDetails.Bitrate) + "k");
     }
 
     args.push_back(FileUtils::PathToUtf8(tempPath.string()));
@@ -439,15 +439,6 @@ bool Ffmpeg::SetBitrate(const std::filesystem::path& filePath, const unsigned in
     std::filesystem::rename(tempPath, filePath);
 
     return true;
-}
-
-int Ffmpeg::RoundUpBitrate(const int& bitrate, const int& max)
-{
-    int remainder = bitrate % 32;
-    int roundedBitrate = remainder == 0 ? bitrate : bitrate + (32 - remainder);
-
-    if (max == 0) return roundedBitrate;
-    return std::min(roundedBitrate, max);
 }
 
 std::string Ffmpeg::Execute(const FfmpegAudioDetails& audioDetails, const std::vector<std::string>& args, const std::function<void(float)>& progressCallback)
