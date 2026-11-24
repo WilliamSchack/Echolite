@@ -98,8 +98,10 @@ Rectangle {
                 }
 
                 Column {
-                    Layout.fillHeight: true
                     Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter
+
+                    spacing: 2
 
                     // Title
                     Text {
@@ -114,7 +116,7 @@ Rectangle {
 
                     Row {
                         width: parent.width
-                        height: parent.height / 2
+                        height: artistText.height
 
                         spacing: 5
 
@@ -133,6 +135,7 @@ Rectangle {
 
                         // Artist
                         Text {
+                            id: artistText
                             width: parent.width
                             anchors.verticalCenter: parent.verticalCenter
                             rightPadding: 20
