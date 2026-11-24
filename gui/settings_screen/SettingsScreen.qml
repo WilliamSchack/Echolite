@@ -314,17 +314,52 @@ RowLayout {
                             }
 
                             SettingsItem {
-                                label: "Normalise Volume"
-                                tooltip: "Increases/Decreases the volume of the output based on the average over the whole track\n\n**Loud:** -11dB<br />**Normal:** -14dB<br />**Quiet:** -17dB"
+                                label: "Normalise Type"
+                                tooltip: "Increases/Decreases the volume of the output based on the audio details\n\n**None:** Doesn't normalise the audio<br />**Loudness:** Sets the integrated loudness to the target value while preventing clipping<br />**Peak:** Sets the true peak to the target value"
 
-                                CustomSwitch {
+                                CustomComboBox {
+                                    Layout.minimumWidth: 100
+                                    Layout.maximumWidth: 300
+                                    Layout.fillWidth: true
                                     Layout.fillHeight: true
 
-                                    checked: _manager.settings.normalise
-                                    onClicked: _manager.settings.normalise = checked
+                                    model: _manager.settings.GetNormaliseTypeOptions()
+                                    currentIndex: _manager.settings.normaliseType
+                                    onActivated: (index) => { _manager.settings.normaliseType = index }
 
-                                    Accessible.name: "Normalise Volume Enabled"
+                                    Accessible.name: "Normalise Type"
                                 }
+                            }
+
+                            SettingsItem {
+                                label: "Normalise Loudness Target LUFS"
+                                tooltip: "The LUFS value to target\n\n**Loud:** -11LUFS<br />**Normal:** -14LUFS<br />**Quiet:** -17LUFS"
+                                visible: _manager.settings.normaliseType === 1 // ENormaliseType::Loudness
+
+                                DoubleTextField {
+                                    Layout.minimumWidth: 100
+                                    Layout.maximumWidth: 300
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+
+                                    enabled: _manager.settings.normalise
+                                    min: -50.0
+                                    max: 50.0
+                                    decimals: 1
+                                    rightText: "LUFS"
+                                    hasRightLabel: true
+
+                                    boundValue: _manager.settings.normaliseLoudnessTargetLUFS
+                                    onValueChanged: (value) => { _manager.settings.normaliseLoudnessTargetLUFS = value }
+
+                                    Accessible.name: "Normalise Loudness Target LUFS"
+                                }
+                            }
+
+                            SettingsItem {
+                                label: "Normalise Peak Target dB"
+                                tooltip: "The dB value to target"
+                                visible: _manager.settings.normaliseType === 2 // ENormaliseType::Peak
 
                                 DoubleTextField {
                                     Layout.minimumWidth: 100
@@ -339,17 +374,17 @@ RowLayout {
                                     rightText: "dB"
                                     hasRightLabel: true
 
-                                    boundValue: _manager.settings.normaliseDb
-                                    onValueChanged: (value) => { _manager.settings.normaliseDb = value }
+                                    boundValue: _manager.settings.normalisePeakTargetDb
+                                    onValueChanged: (value) => { _manager.settings.normalisePeakTargetDb = value }
 
-                                    Accessible.name: "Normalise Volume Decibels"
+                                    Accessible.name: "Normalise Peak Target dB"
                                 }
                             }
 
                             SettingsItem {
-                                visible: !_manager.settings.formatIsLossless
                                 label: "Audio Bitrate"
                                 tooltip: "**Best Quality:** Doesn't modify the bitrate from the downloaded file<br />**Manual:** Converts the bitrate to the value set on the right\n\nOnly accepts numbers within 33-" + _manager.settings.bitrateMax + " with a multiple of 32\n\nIf you are using YouTube Premium, this value can be increased to " + _manager.settings.bitrateMaxPremium + "kbps"
+                                visible: !_manager.settings.formatIsLossless
 
                                 CustomComboBox {
                                     Layout.fillHeight: true
@@ -398,9 +433,9 @@ RowLayout {
                             }
 
                             SettingsItem {
-                                visible: _manager.settings.formatIsLossless
                                 label: "Audio Format"
                                 tooltip: "**Only change this if you really need another format**\n\nAll downloads will be lossy so this really just pads out the file"
+                                visible: _manager.settings.formatIsLossless
 
                                 CustomComboBox {
                                     Layout.minimumWidth: 100
