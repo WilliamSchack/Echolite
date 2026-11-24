@@ -47,6 +47,8 @@ Rectangle {
 
                 // Download / Cancel
                 CustomButton {
+                    id: downloadButton
+
                     Layout.fillHeight: true
 
                     enabled: _manager.music.downloadButtonEnabled
@@ -108,7 +110,7 @@ Rectangle {
 
                     Timer {
                         id: downloadsCompletedAnnounceTimer
-                        interval: 2000
+                        interval: 1000
                         
                         onTriggered: () => {
                             // Only announce if the app is focused
@@ -315,6 +317,13 @@ Rectangle {
         shown: !_manager.info.updates.allInstalled && (parent ? parent.visible : false)
 
         radius: parent.radius
+
+        onShownChanged: {
+            if (shown)
+                return
+                
+            downloadButton.forceActiveFocus()
+        }
     }
 
     // Add Tracks Popup
@@ -323,5 +332,12 @@ Rectangle {
         shown: _manager.music.addTracksPopup.visible && (parent ? parent.visible : false) && !missingDependenciesPopup.visible
         
         radius: parent.radius
+
+        onShownChanged: {
+            if (shown)
+                return
+
+            downloadButton.forceActiveFocus()
+        }
     }
 }
