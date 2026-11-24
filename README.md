@@ -103,7 +103,7 @@ This has been fixed and the app has been excluded from windows defender scans, i
 	- *Formats here that should be lossless (WAV, FLAC) are not. They are converted from the source format which is lossy*
 - **Audio Normalising**
 	- The volume of every song can be normalised to a level you set
-	- *Currently uses the track averages but more options will come later*
+	- Has support for loudness or peak normalisation
 - **Dynamic File & Output Folders Naming**
 	- File names can be set to use any combination of metadata in the songs
 	- Sub folders can be created using any combination of metadata in the songs
