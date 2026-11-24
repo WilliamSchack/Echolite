@@ -22,7 +22,13 @@ UpdatesScreenGUI::UpdatesScreenGUI(QObject* parent) : QObject(parent)
         },
         []() -> std::string {
             QDesktopServices::openUrl(QUrl("https://github.com/WilliamSchack/Echolite/releases/latest"));
-            return "";
+
+            std::string message = "The latest release has opened in your web browser. Download the app again to update";
+#ifdef _WIN32
+            message += "\n\nIf you are using the installer version, installing it again will automatically update the app";
+#endif
+
+            return message;
         },
         []() -> std::string {
             return "";
