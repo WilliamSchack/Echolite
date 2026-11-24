@@ -187,13 +187,15 @@ DownloadResult TrackDownloader::DownloadTrack(const TrackData& track, const EPla
     // == Normalise
     float progressStartPercentage = 0.7;
     float progressEndPercentage = Config::GetLyrics ? 0.9 : 1.0;
+    float progressMiddlePercentage = progressStartPercentage + (progressEndPercentage - progressStartPercentage) / 2;
 
     if (Config::NormaliseType != ENormaliseType::None) {
         Logger::Info(track.GetUniqueId() + ": Normalising");
+        
         SetProgress(eventCallback, track, progressStartPercentage, "Normalising Audio...");
-
+        float normaliseEndPercentage = Config::ManualBitrate ? progressMiddlePercentage : progressEndPercentage;
         std::function<void(float)> progressCallback = [&](float progress) {
-            SetProgress(eventCallback, track, MathUtils::Lerp(progressStartPercentage, progressEndPercentage, progress), "Normalising Audio...");
+            SetProgress(eventCallback, track, MathUtils::Lerp(progressStartPercentage, normaliseEndPercentage, progress), "Normalising Audio...");
         };
 
         bool normalised = false;
@@ -211,13 +213,18 @@ DownloadResult TrackDownloader::DownloadTrack(const TrackData& track, const EPla
     }
     
     // == Set bitrate
-    else if (Config::ManualBitrate) {
+    if (Config::ManualBitrate) {
         Logger::Info(track.GetUniqueId() + ": Setting bitrate");
-        SetProgress(eventCallback, track, progressStartPercentage, "Setting Bitrate...");
+        
+        float bitrateStartPercentage = Config::NormaliseType != ENormaliseType::None ? progressMiddlePercentage : progressStartPercentage;
+        SetProgress(eventCallback, track, bitrateStartPercentage, "Setting Bitrate...");
 
         bool bitrateSet = Ffmpeg::SetBitrate(tempDownloadPath, Config::BitrateKbps[targetCodec->GetExtension()], [&](float progress) {
-            SetProgress(eventCallback, track, MathUtils::Lerp(progressStartPercentage, progressEndPercentage, progress), "Setting Bitrate...");
+            SetProgress(eventCallback, track, MathUtils::Lerp(bitrateStartPercentage, progressEndPercentage, progress), "Setting Bitrate...");
         });
+
+        if (!bitrateSet)
+            Logger::Warning(track.GetUniqueId() + ": Failed to set the bitrate");
     }
 
     // == Get lyrics
