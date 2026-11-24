@@ -92,6 +92,9 @@ class MetadataManager
 
         void SetStringField(const EMetadataTag& tag, const std::string& value) const;
         std::string GetStringField(const EMetadataTag& tag) const;
+
+        void SetIntField(const EMetadataTag& tag, const int& value) const;
+        int GetIntField(const EMetadataTag& tag) const;
     private:
         TagLib::FileRef _fileRef;
         std::unique_ptr<ICodec> _codec;

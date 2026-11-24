@@ -80,7 +80,7 @@ void MetadataManager::SetReleaseDate(const std::string& value)
 
 void MetadataManager::SetTrackNumber(const unsigned int& value)
 {
-    SetStringField(EMetadataTag::TrackNumber, std::to_string(value));
+    SetIntField(EMetadataTag::TrackNumber, value);
 }
 
 void MetadataManager::SetDiscNumber(const unsigned int& value)
@@ -94,7 +94,7 @@ void MetadataManager::SetDiscNumber(const unsigned int& value)
         return;
     }
 
-    SetStringField(EMetadataTag::DiscNumber, std::to_string(value));
+    SetIntField(EMetadataTag::DiscNumber, value);
 }
 
 void MetadataManager::SetLyrics(const std::string& value)
@@ -222,18 +222,12 @@ std::string MetadataManager::GetReleaseDate() const
 
 unsigned int MetadataManager::GetTrackNumber() const
 {
-    std::string fieldString = GetStringField(EMetadataTag::TrackNumber);
-    if (fieldString.empty()) return 0;
-
-    return std::stoi(fieldString);
+    return GetIntField(EMetadataTag::TrackNumber);
 }
 
 unsigned int MetadataManager::GetDiscNumber() const
 {
-    std::string fieldString = GetStringField(EMetadataTag::DiscNumber);
-    if (fieldString.empty()) return 0;
-
-    return std::stoi(fieldString);
+    return GetIntField(EMetadataTag::DiscNumber);
 }
 
 std::string MetadataManager::GetLyrics() const
@@ -456,7 +450,7 @@ TagLib::Matroska::SimpleTag::TargetTypeValue MetadataManager::GetMatroskaTargetT
 
 void MetadataManager::SetStringField(const EMetadataTag& tag, const std::string& value) const
 {
-    if (_readOnly || !IsValid() || tag == EMetadataTag::CoverImage)
+    if (_readOnly || !IsValid())
         return;
     
     TagLib::Tag* fileTag = _codec->GetFileTag(_fileRef);
@@ -537,6 +531,46 @@ std::string MetadataManager::GetStringField(const EMetadataTag& tag) const
     }
     
     return "";
+}
+
+void MetadataManager::SetIntField(const EMetadataTag& tag, const int& value) const
+{
+    if (_readOnly || !IsValid())
+        return;
+
+    if (_codec->GetMetadataType() == EMetadataType::MP4) {
+        TagLib::Tag* fileTag = _codec->GetFileTag(_fileRef);
+        if (fileTag == nullptr) return;
+
+        const char* tagId = GetTagId(tag);
+        if (tagId == NULL) return;
+
+        dynamic_cast<TagLib::MP4::Tag*>(fileTag)->setItem(tagId, TagLib::MP4::Item(value, 0));
+        return;
+    }
+
+    SetStringField(tag, std::to_string(value));
+}
+
+int MetadataManager::GetIntField(const EMetadataTag& tag) const
+{
+    if (!IsValid())
+        return 0;
+
+    if (_codec->GetMetadataType() == EMetadataType::MP4) {
+        TagLib::Tag* fileTag = _codec->GetFileTag(_fileRef);
+        if (fileTag == nullptr) return 0;
+
+        const char* tagId = GetTagId(tag);
+        if (tagId == NULL) return 0;
+
+        TagLib::MP4::Item item = dynamic_cast<TagLib::MP4::Tag*>(fileTag)->item(tagId);
+        if (!item.isValid()) return 0;
+
+        return item.toInt();
+    }
+
+    return std::stoi(GetStringField(tag));
 }
 
 void MetadataManager::Close()
