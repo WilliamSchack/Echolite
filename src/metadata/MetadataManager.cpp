@@ -90,6 +90,8 @@ void MetadataManager::SetDiscNumber(const unsigned int& value)
         TagLib::Tag* fileTag = _codec->GetFileTag(_fileRef);
 
         dynamic_cast<TagLib::Matroska::Tag*>(fileTag)->addSimpleTag(TagLib::Matroska::SimpleTag("PART_NUMBER", taglibString, TagLib::Matroska::SimpleTag::TargetTypeValue::Album));
+
+        return;
     }
 
     SetStringField(EMetadataTag::DiscNumber, std::to_string(value));
@@ -149,7 +151,7 @@ void MetadataManager::SetCoverImage(const Image& image)
             dynamic_cast<TagLib::ID3v2::Tag*>(fileTag)->addFrame(picFrame);
             break;
         } case EMetadataType::MP4: {
-            TagLib::MP4::CoverArt coverArt(TagLib::MP4::CoverArt::Format::PNG, taglibImage);
+            TagLib::MP4::CoverArt coverArt(image.Format == EImageFormat::PNG ? TagLib::MP4::CoverArt::Format::PNG : TagLib::MP4::CoverArt::Format::JPEG, taglibImage);
             TagLib::MP4::CoverArtList coverArtList;
             coverArtList.append(coverArt);
             TagLib::MP4::Item coverItem(coverArtList);
@@ -173,6 +175,7 @@ void MetadataManager::SetCoverImage(const Image& image)
             coverArtList.append(coverArt);
 
             dynamic_cast<TagLib::Matroska::File*>(_fileRef.file())->setComplexProperties(tagId, coverArtList);
+            break;
         }
     }
 }
@@ -483,6 +486,7 @@ void MetadataManager::SetStringField(const EMetadataTag& tag, const std::string&
         } case EMetadataType::Matroska: {
             TagLib::Matroska::SimpleTag matroskaTag(tagId, taglibString, GetMatroskaTargetType(tag));
             dynamic_cast<TagLib::Matroska::Tag*>(fileTag)->addSimpleTag(matroskaTag);
+            break;
         }
     }
 }
@@ -520,9 +524,11 @@ std::string MetadataManager::GetStringField(const EMetadataTag& tag) const
 
             return fields[tagId].to8Bit(true);
         } case EMetadataType::Matroska: {
+            TagLib::Matroska::SimpleTag::TargetTypeValue targetTagType = GetMatroskaTargetType(tag);
+
             const TagLib::Matroska::SimpleTagsList tagList = dynamic_cast<TagLib::Matroska::Tag*>(fileTag)->simpleTagsList();
             for (TagLib::Matroska::SimpleTag existingTag : tagList) {
-                if (existingTag.name() == tagId)
+                if (existingTag.name() == tagId && existingTag.targetTypeValue() == targetTagType)
                     return existingTag.toString().to8Bit(true);
             }
 

@@ -277,7 +277,7 @@ DownloadResult TrackDownloader::DownloadTrack(const TrackData& track, const EPla
     metadata.SetCopyright(copyrightText);
     metadata.SetComment(commentText);
     metadata.SetReleaseDate(track.ReleaseDate);
-    metadata.SetTrackNumber(trackNumber); // Use playlist number if a playlist (might actually store playlist number in the regular track number from DownloadManager if a playlist)
+    metadata.SetTrackNumber(trackNumber);
     metadata.SetDiscNumber(track.DiscNumber);
     if (lyrics.Type != ELyricsType::None) metadata.SetLyrics(lyrics.GetString());
     metadata.Close();
