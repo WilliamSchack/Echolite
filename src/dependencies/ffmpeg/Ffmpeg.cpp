@@ -215,51 +215,65 @@ FfmpegAudioDetails Ffmpeg::GetAudioDetails(const std::filesystem::path& filePath
     process.AddArgument("-"); // No output
     std::string output = process.Execute().Output;
 
+    // Only read the input details
+    std::string inputDetails = output;
+    std::string outputDetails = output;
+
+    std::vector<std::string> outputSplit = StringUtils::Split(output, "Stream mapping:");
+    if (outputSplit.size() > 1) {
+        inputDetails = outputSplit[0];
+        outputDetails = outputSplit[1];
+    }
+
     // Parse details    
     std::smatch matches;
 
     // Duration
-    if (std::regex_search(output, matches, std::regex(R"(Duration:\s(.+?),)"))) {
+    if (std::regex_search(inputDetails, matches, std::regex(R"(Duration:\s(.+?),)"))) {
         details.DurationMilliseconds = StringUtils::TimeToMilliseconds(matches[1]);
         details.DurationSeconds = details.DurationMilliseconds / 1000.0;
     }
 
-    // Bitrate
-    if (std::regex_search(output, matches, std::regex(R"(bitrate:\s(\d+?)\s)")))
+    // Bitrate (Container, backup incase the audio stream doesnt provide it)
+    if (std::regex_search(inputDetails, matches, std::regex(R"(bitrate:\s(\d+?)\s)")))
+        details.Bitrate = std::stoi(matches[1]);
+
+    // Bitrate (Stream)
+    if (std::regex_search(inputDetails, matches, std::regex(R"(Stream.+?Audio:.+?,\s(\d+)\skb\/s)")))
         details.Bitrate = std::stoi(matches[1]);
 
     if (!getVolumeDetails)
         return details;
 
     // Decibals
-    if (std::regex_search(output, matches, std::regex(R"(mean_volume:\s([^\s]+?)\s)")))
+    if (std::regex_search(outputDetails, matches, std::regex(R"(mean_volume:\s([^\s]+?)\s)")))
         details.MeanDB = std::stof(matches[1]);
 
-    if (std::regex_search(output, matches, std::regex(R"(max_volume:\s([^\s]+?)\s)")))
+    if (std::regex_search(outputDetails, matches, std::regex(R"(max_volume:\s([^\s]+?)\s)")))
         details.MaxDB = std::stof(matches[1]);
 
     // Integrated Loudness
-    if (std::regex_search(output, matches, std::regex(R"(I:\s+?([^\s]+?)\s)")))
+    if (std::regex_search(outputDetails, matches, std::regex(R"(I:\s+?([^\s]+?)\s)")))
         details.IntegratedLoudnessLUFS = std::stof(matches[1]);
 
-    if (std::regex_search(output, matches, std::regex(R"(loudness:[\S\s]+?Threshold:\s+?([^\s]+?)\s)")))
+    if (std::regex_search(outputDetails, matches, std::regex(R"(loudness:[\S\s]+?Threshold:\s+?([^\s]+?)\s)")))
         details.IntegratedLoudnessThresholdLUFS = std::stof(matches[1]);
 
     // Loudness Range
-    if (std::regex_search(output, matches, std::regex(R"(LRA:\s+?([^\s]+?)\s)")))
+    if (std::regex_search(outputDetails, matches, std::regex(R"(LRA:\s+?([^\s]+?)\s)")))
         details.LoudnessRangeLUFS = std::stof(matches[1]);
 
-    if (std::regex_search(output, matches, std::regex(R"(range:[\S\s]+?Threshold:\s+?([^\s]+?)\s)")))
+    if (std::regex_search(outputDetails, matches, std::regex(R"(range:[\S\s]+?Threshold:\s+?([^\s]+?)\s)")))
         details.LoudnessRangeThresholdLUFS = std::stof(matches[1]);
 
-    if (std::regex_search(output, matches, std::regex(R"(LRA\slow:\s+?([^\s]+?)\s)")))
+    if (std::regex_search(outputDetails, matches, std::regex(R"(LRA\slow:\s+?([^\s]+?)\s)")))
         details.LoudnessRangeLowLUFS = std::stof(matches[1]);
 
-    if (std::regex_search(output, matches, std::regex(R"(LRA\shigh:\s+?([^\s]+?)\s)")))
+    if (std::regex_search(outputDetails, matches, std::regex(R"(LRA\shigh:\s+?([^\s]+?)\s)")))
         details.LoudnessRangeHighLUFS = std::stof(matches[1]);
 
     // True Peak
-    if (std::regex_search(output, matches, std::regex(R"(Peak:\s+?([^\s]+?)\s)")))
+    if (std::regex_search(outputDetails, matches, std::regex(R"(Peak:\s+?([^\s]+?)\s)")))
         details.TruePeakDBFS = std::stof(matches[1]);
 
     return details;
@@ -295,7 +309,7 @@ std::filesystem::path Ffmpeg::Convert(const std::filesystem::path& filePath, con
 
     if (!targetCodec->GetBitrateDetails().LockedBirtate && audioDetails.Bitrate > 0) {
         args.push_back("-b:a");
-        args.push_back(std::to_string(audioDetails.Bitrate) + "k");
+        args.push_back(std::to_string(RoundUpBitrate(audioDetails.Bitrate)) + "k");
     }
 
     args.push_back(FileUtils::PathToUtf8(newPath));
@@ -329,12 +343,27 @@ bool Ffmpeg::Normalise(const std::filesystem::path& filePath, const std::functio
         "-progress", "-",
         "-nostats",
         "-nostdin",
-        "-af", "volume=" + std::to_string(gainDb) + "dB"
     };
+
+    std::string filter = "volume=" + std::to_string(gainDb) + "dB";
+
+    std::vector<std::string> codecParams = codec->GetFfmpegConversionParams();
+    for (int i = 0; i < codecParams.size(); i++) {
+        // Append filter otherwise it will overwrite the volume change
+        if (codecParams[i] == "-af") {
+            filter += "," + codecParams[++i];
+            continue;
+        }
+
+        args.push_back(codecParams[i]);
+    }
+
+    args.push_back("-af");
+    args.push_back(filter);
 
     if (!codec->GetBitrateDetails().LockedBirtate && audioDetails.Bitrate > 0) {
         args.push_back("-b:a");
-        args.push_back(std::to_string(audioDetails.Bitrate) + "k");
+        args.push_back(std::to_string(RoundUpBitrate(audioDetails.Bitrate)) + "k");
     }
 
     args.push_back(FileUtils::PathToUtf8(tempPath.string()));
@@ -381,17 +410,26 @@ bool Ffmpeg::SetBitrate(const std::filesystem::path& filePath, const unsigned in
     std::filesystem::path tempPath = filePath;
     tempPath.replace_filename(FileUtils::PathToUtf8(filePath.stem()) + "_ffmpeg" + FileUtils::PathToUtf8(filePath.extension()));
     
-    // Set bitrate
     FfmpegAudioDetails audioDetails = GetAudioDetails(filePath, false);
-    Execute(audioDetails, {
+    std::unique_ptr<ICodec> codec = CodecFactory::Create(filePath.extension().string());
+
+    // Set bitrate
+    std::vector<std::string> args {
         "-i", FileUtils::PathToUtf8(filePath),
         "-y",
         "-progress", "-",
         "-nostats",
         "-nostdin",
         "-b:a", std::to_string(bitrate) + "k",
-        FileUtils::PathToUtf8(tempPath)
-    }, progressCallback);
+    };
+
+    for (const std::string& param : codec->GetFfmpegConversionParams()) {
+        args.push_back(param);
+    }
+
+    args.push_back(FileUtils::PathToUtf8(tempPath.string()));
+
+    Execute(audioDetails, args, progressCallback);
 
     // Rename back to original
     if (!std::filesystem::exists(tempPath))
@@ -401,6 +439,15 @@ bool Ffmpeg::SetBitrate(const std::filesystem::path& filePath, const unsigned in
     std::filesystem::rename(tempPath, filePath);
 
     return true;
+}
+
+int Ffmpeg::RoundUpBitrate(const int& bitrate, const int& max)
+{
+    int remainder = bitrate % 32;
+    int roundedBitrate = remainder == 0 ? bitrate : bitrate + (32 - remainder);
+
+    if (max == 0) return roundedBitrate;
+    return std::min(roundedBitrate, max);
 }
 
 std::string Ffmpeg::Execute(const FfmpegAudioDetails& audioDetails, const std::vector<std::string>& args, const std::function<void(float)>& progressCallback)
