@@ -90,11 +90,9 @@ Rectangle {
                             color: "#656565"
                         }
 
-                        BusyIndicator {
-                            anchors.fill: parent
-
-                            running: parent.visible
-                            palette.dark: "white"
+                        LoadingStatus {
+                            isLoading: parent.visible
+                            indicatorSize: 20
                         }
                     }
                 }

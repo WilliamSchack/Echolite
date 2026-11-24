@@ -4,8 +4,9 @@ Item {
     id: root
 
     required property bool isLoading
-    required property bool loadingFailed
-    required property string contentLabel
+    property bool loadingFailed: false
+    property string contentLabel: ""
+    property int indicatorSize: 50
 
     implicitWidth: parent.width
     implicitHeight: parent.height
@@ -17,8 +18,8 @@ Item {
 
         Image {
             id: visuals
-            height: 50
-            width: 50
+            height: root.indicatorSize
+            width: root.indicatorSize
 
             source: "qrc:/icons/ui/Update.svg"
             sourceSize.width: width
@@ -40,6 +41,7 @@ Item {
 
         Text {
             anchors.verticalCenter: parent.verticalCenter
+            visible: root.contentLabel !== ""
             text: "Loading " + root.contentLabel + "..."
             color: "white"
             font.bold: true
@@ -49,8 +51,8 @@ Item {
 
     Text {
         anchors.centerIn: parent
-        visible: root.loadingFailed
-        text: "Failed to Get " + contentLabel
+        visible: root.contentLabel !== "" && root.loadingFailed
+        text: "Failed to Get " + root.contentLabel
         color: "white"
         font.bold: true
         font.pixelSize: 28
