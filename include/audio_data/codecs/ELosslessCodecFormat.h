@@ -14,6 +14,7 @@ enum class ELosslessCodecFormat
 };
 
 static inline const std::vector<std::string> ELOSSLESSCODECFORMAT_NAMES = {
+    "Unknown",
     "16-bit 44100Hz",
     "16-bit 48000Hz"
 };
