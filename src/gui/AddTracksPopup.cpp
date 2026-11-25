@@ -25,7 +25,7 @@ void AddTracksPopup::PasteButtonClicked()
 
 void AddTracksPopup::FolderButtonClicked()
 {
-    QFileDialog dialog(nullptr, "Choose output directory", "");
+    QFileDialog dialog(nullptr, "Choose output directory", _folderInputText);
     dialog.setFileMode(QFileDialog::Directory);
     dialog.setOptions(QFileDialog::ShowDirsOnly);
     FileDialogUtils::SetParent(dialog, QGuiApplication::focusWindow());

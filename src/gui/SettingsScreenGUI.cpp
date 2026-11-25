@@ -98,7 +98,7 @@ bool SettingsScreenGUI::GetFormatIsLossless() const
 
 void SettingsScreenGUI::DefaultSaveLocationButtonClicked()
 {
-    QFileDialog dialog(nullptr, "Choose output directory", "");
+    QFileDialog dialog(nullptr, "Choose output directory", GetDefaultSaveLocation());
     dialog.setFileMode(QFileDialog::Directory);
     dialog.setOptions(QFileDialog::ShowDirsOnly);
     FileDialogUtils::SetParent(dialog, QGuiApplication::focusWindow());
