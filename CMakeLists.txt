@@ -222,6 +222,8 @@ elseif (UNIX AND INCLUDE_DEPS)
                 --desktop-file "${DESKTOP_FILE}"
                 --icon-file "${APP_ICON_LINUX}"
                 --icon-filename "${APP_ID}"
+                --exclude-library "libnss3.so"
+                --exclude-library "libnssutil3.so"
                 --plugin qt
         VERBATIM
     )
