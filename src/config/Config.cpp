@@ -234,7 +234,9 @@ bool Config::Load(const std::filesystem::path& path)
     std::string contents = std::string((std::istreambuf_iterator<char>(file)), (std::istreambuf_iterator<char>()));
     file.close();
 
-    nlohmann::json json = nlohmann::json::parse(contents);
+    nlohmann::json json = nlohmann::json::parse(contents, {}, false);
+    if (json.empty() || json.is_discarded()) return false;
+
     FromJson(json);
 
     Logger::Info("Loaded the config from (" + FileUtils::PathToUtf8(path) + "): " + GetLoggableString(json));
