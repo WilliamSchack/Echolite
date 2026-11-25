@@ -3,7 +3,7 @@
 ; Non-commercial use only.
 
 #define MyAppName "Echolite"
-#define MyAppVersion "2.1.0"
+#define MyAppVersion "2.1.1"
 #define MyAppPublisher "William Schack"
 #define MyAppURL "https://echolite.app"
 #define MyAppExeName "Echolite.exe"
