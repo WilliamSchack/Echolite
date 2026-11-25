@@ -131,8 +131,6 @@ Rectangle {
                 CustomButton {
                     Layout.fillHeight: true
 
-                    visible: root.firstDownloadFinished
-
                     text: "Support Development"
                     font.pixelSize: 14
                     backgroundColour: "#A16583"

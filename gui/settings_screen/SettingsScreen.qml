@@ -342,7 +342,6 @@ RowLayout {
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
 
-                                    enabled: _manager.settings.normalise
                                     min: -50.0
                                     max: 50.0
                                     decimals: 1
@@ -367,7 +366,6 @@ RowLayout {
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
 
-                                    enabled: _manager.settings.normalise
                                     min: -50.0
                                     max: 50.0
                                     decimals: 1
