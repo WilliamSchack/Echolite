@@ -189,6 +189,10 @@ YtdlpResult Ytdlp::Download(const std::string& url, const std::filesystem::path&
     // Download
     ExternalProcess process(ytdlpPath);
     process.AddArgument("--ffmpeg-location", ffmpegPath.string());
+#if _WIN32
+    // Dont check for other runtimes on windows
+    process.AddArgument("--no-js-runtimes");
+#endif
     process.AddArgument("--js-runtimes", "quickjs:" + quickJsPath.string());
     process.AddArgument("--print", "DETAILS: [bitrate]%(abr)s[duration]%(duration_string)s[extension]%(ext)s");
     process.AddArgument("-v");
